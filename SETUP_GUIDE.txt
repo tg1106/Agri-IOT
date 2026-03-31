@@ -1,6 +1,6 @@
 ╔════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                ║
-║           PS2 PRECISION FARMING NODE - SETUP & INTEGRATION GUIDE              ║
+║           PS2 PRECISION FARMING NODE - SETUP & INTEGRATION GUIDE               ║
 ║                                                                                ║
 ║                          Autonomous Plant Watering System                      ║
 ║                                                                                ║
@@ -23,7 +23,7 @@
 
 ARCHITECTURE:
 ┌──────────────┐        USB Cable         ┌──────────────┐       Flask Server
-│              │◄─────────────────────────►│   Python     │  ◄──►  localhost:5000
+│              │◄────────────────────────►│   Python     │  ◄──►  localhost:5000
 │    ESP32     │    Serial (115200 baud)  │   Bridge     │
 │              │                          │  (localhost) │
 └──────────────┘                          └──────────────┘
@@ -119,8 +119,8 @@ UPLOAD STEPS:
 8. Wait for "Uploading..." → "Done Uploading"
    Expected output in Serial Monitor:
    ╔════════════════════════════════════════════╗
-   ║  PS2 - Precision Farming Node (ESP32)     ║
-   ║  Initializing Sensors...                  ║
+   ║  PS2 - Precision Farming Node (ESP32)      ║
+   ║  Initializing Sensors...                   ║
    ╚════════════════════════════════════════════╝
    ✓ BME280 initialized (Temp, Humidity, Pressure)
    ✓ NPK sensor serial port ready...
