@@ -210,40 +210,6 @@ ELIF PSI > 0.75:
 
 ---
 
-## 🔮 Roadmap
-
-### Phase 1 ✅ (Complete - v1.0)
-- [x] Multi-sensor monitoring
-- [x] Harmonic decision logic
-- [x] Web dashboard
-- [x] Manual override
-- [x] Performance metrics
-
-### Phase 2 🔄 (Q2 2024)
-- [ ] TensorFlow Lite model training
-- [ ] Adaptive thresholds per farm
-- [ ] Predictive watering (1-2 hours ahead)
-- [ ] Anomaly detection for sensor drift
-
-### Phase 3 🔄 (Q3 2024)
-- [ ] Multi-node support
-- [ ] Zone-level optimization
-- [ ] Global water usage analytics
-
-### Phase 4 🔄 (Q4 2024)
-- [ ] Optional cloud sync (offline-first)
-- [ ] Weather API integration
-- [ ] Yield prediction
-- [ ] Farmer mobile app
-
-### Phase 5 🔄 (2025+)
-- [ ] Soil probe array
-- [ ] Pest detection (camera + ML)
-- [ ] Nutrient injection automation
-- [ ] Agricultural marketplace integration
-
----
-
 ## 📜 License & Attribution
 
 Agri-IoT is released under the **MIT License**.
