@@ -140,41 +140,41 @@ ELIF PSI > 0.75:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│              AGRI-IOT PRECISION FARMING NODE             │
+│              AGRI-IOT PRECISION FARMING NODE            │
 ├─────────────────────────────────────────────────────────┤
-│                                                          │
+│                                                         │
 │  SENSING LAYER                                          │
-│  ├─ TCS3200 (Light) → GPIO A1                          │
-│  ├─ BME280 (Temp/Humidity/Pressure) → I2C (21, 22)     │
-│  ├─ Moisture Sensor → GPIO A0                          │
-│  └─ NPK Sensor → GPIO 16/17 (Serial)                   │
-│         ↓                                                │
-│  PROCESSING LAYER (ESP32)                              │
-│  ├─ Read sensors every 5 seconds                       │
-│  ├─ Run decision logic every 3 minutes                 │
-│  ├─ Output JSON via USB serial (115200 baud)           │
-│  └─ Maintain metrics & decision history                │
-│         ↓                                                │
+│  ├─ TCS3200 (Light) → GPIO A1                           │
+│  ├─ BME280 (Temp/Humidity/Pressure) → I2C (21, 22)      │
+│  ├─ Moisture Sensor → GPIO A0                           │
+│  └─ NPK Sensor → GPIO 16/17 (Serial)                    │
+│         ↓                                               │
+│  PROCESSING LAYER (ESP32)                               │
+│  ├─ Read sensors every 5 seconds                        │
+│  ├─ Run decision logic every 3 minutes                  │
+│  ├─ Output JSON via USB serial (115200 baud)            │
+│  └─ Maintain metrics & decision history                 │
+│         ↓                                               │
 │  ACTUATION LAYER                                        │
-│  ├─ Water Pump (GPIO 12, 20 sec pulse)                │
-│  └─ Fertilizer LED (GPIO 13, 5 sec pulse)             │
-│                                                          │
+│  ├─ Water Pump (GPIO 12, 20 sec pulse)                  │
+│  └─ Fertilizer LED (GPIO 13, 5 sec pulse)               │
+│                                                         │
 └─────────────────────────────────────────────────────────┘
        ↓ USB Serial Cable
 ┌─────────────────────────────────────────────────────────┐
 │         AGRI-IOT BRIDGE (Python Flask Server)           │
 │  • Read serial data                                     │
-│  • REST API on localhost:5000                          │
-│  • Handle manual overrides                             │
+│  • REST API on localhost:5000                           │
+│  • Handle manual overrides                              │
 └─────────────────────────────────────────────────────────┘
        ↓ HTTP/AJAX
 ┌─────────────────────────────────────────────────────────┐
 │    AGRI-IOT DASHBOARD (Web Browser Interface)           │
-│  • Real-time monitoring                                │
-│  • Sensor visualization                                │
-│  • Manual control buttons                              │
-│  • Performance metrics                                 │
-│  • Mobile responsive                                   │
+│  • Real-time monitoring                                 │
+│  • Sensor visualization                                 │
+│  • Manual control buttons                               │
+│  • Performance metrics                                  │
+│  • Mobile responsive                                    │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -322,17 +322,17 @@ Built with:
 - Open-source agriculture community
 
 Special thanks to:
-- **VIT Vellore** - Institution support
-- **Binary Club** - Community collaboration
+- **VIT Chennai** - Institution support
+- **AutoVIT** - Club collaboration
 - All open-source contributors
 
 ---
 
 ## 📞 Contact
 
-**Project Lead**: Tarun Krishnamanivannan
-**Institution**: Vellore Institute of Technology (VIT), Vellore
-**Community**: Binary Club Web Development Team
+**Project Lead**: Tharun Gopinath
+**Institution**: Vellore Institute of Technology (VIT), Chennai
+**Department**: SCOPE
 
 ---
 
