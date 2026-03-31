@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS2 - Precision Farming Node</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #2a5298;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        th {
+            background: #f0f4f8;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1e3c72;
+            border-bottom: 2px solid #2a5298;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #555;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .value {
+            font-weight: 600;
+            color: #2a5298;
+            font-size: 1.1em;
+        }
+
+        .status-good {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        .status-warning {
+            color: #f39c12;
+            font-weight: 700;
+        }
+
+        .status-critical {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .control-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .control-section h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #2a5298;
+            padding-bottom: 10px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-water {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-water:hover {
+            background: #2980b9;
+            transform: scale(1.02);
+        }
+
+        .btn-water:active {
+            transform: scale(0.98);
+        }
+
+        .btn-fertilize {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-fertilize:hover {
+            background: #229954;
+            transform: scale(1.02);
+        }
+
+        .btn-fertilize:active {
+            transform: scale(0.98);
+        }
+
+        .confirmation {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+            border-left: 4px solid #2a5298;
+        }
+
+        .confirmation.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-box.uptime {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .metric-box.decision {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .metric-box.water {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: #333;
+        }
+
+        .metric-box.fertilize {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            opacity: 0.85;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 1.6em;
+            font-weight: 700;
+        }
+
+        .decision-display {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .decision-display h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #2a5298;
+            padding-bottom: 10px;
+        }
+
+        .decision-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #2a5298;
+            margin-bottom: 15px;
+        }
+
+        .decision-action {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .decision-psi {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .decision-reasoning {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .psi-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .psi-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .status-light {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-light.healthy {
+            background: #27ae60;
+        }
+
+        .status-light.caution {
+            background: #f39c12;
+        }
+
+        .status-light.critical {
+            background: #e74c3c;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2a5298;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .last-update {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌾 PS2 Precision Farming Node</h1>
+            <p>Autonomous Plant Watering System | Real-time Monitoring Dashboard</p>
+        </header>
+
+        <div class="decision-display">
+            <h2>🎯 Current Decision</h2>
+            <div id="decisionContent">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Connecting to ESP32...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <h2>🌱 Soil Health</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nutrient</th>
+                            <th>Value (ppm)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nitrogen (N)</td>
+                            <td class="value" id="npk-n">--</td>
+                            <td id="npk-n-status">-</td>
+                        </tr>
+                        <tr>
+                            <td>Phosphorus (P)</td>
+                            <td class="value" id="npk-p">--</td>
+                            <td id="npk-p-status">-</td>
+                        </tr>
+                        <tr>
+                            <td>Potassium (K)</td>
+                            <td class="value" id="npk-k">--</td>
+                            <td id="npk-k-status">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>🌿 Plant Health</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Temperature</td>
+                            <td class="value" id="temp">-- °C</td>
+                            <td id="temp-status">-</td>
+                        </tr>
+                        <tr>
+                            <td>Humidity</td>
+                            <td class="value" id="humidity">-- %</td>
+                            <td id="humidity-status">-</td>
+                        </tr>
+                        <tr>
+                            <td>Pressure</td>
+                            <td class="value" id="pressure">-- hPa</td>
+                            <td id="pressure-status">-</td>
+                        </tr>
+                        <tr>
+                            <td>Light Intensity</td>
+                            <td class="value" id="light">-- Lux</td>
+                            <td id="light-status">-</td>
+                        </tr>
+                        <tr>
+                            <td>Soil Moisture</td>
+                            <td class="value" id="moisture">-- %</td>
+                            <td id="moisture-status">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h2>⚙️ Manual Control (Master Override)</h2>
+            <p style="margin-bottom: 20px; color: #555;">Bypass automatic decision and force actions manually:</p>
+            <div class="button-group">
+                <button class="btn-water" onclick="forceWater()">💧 Force Water (20 sec)</button>
+                <button class="btn-fertilize" onclick="forceFertilize()">🌱 Force Fertilize (5 sec)</button>
+            </div>
+            <div id="confirmation" class="confirmation">
+                <p id="confirmationText"></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-box uptime">
+                    <div class="metric-label">System Uptime</div>
+                    <div class="metric-value" id="uptime">--:--:--</div>
+                </div>
+                <div class="metric-box water">
+                    <div class="metric-label">Last Watering</div>
+                    <div class="metric-value" id="lastWater">--</div>
+                </div>
+                <div class="metric-box fertilize">
+                    <div class="metric-label">Last Fertilize</div>
+                    <div class="metric-value" id="lastFertilize">--</div>
+                </div>
+                <div class="metric-box decision">
+                    <div class="metric-label">Decisions Today</div>
+                    <div class="metric-value" id="decisionCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="last-update">
+            <p>Last Updated: <span id="lastUpdate">--:--:--</span> | Status: <span id="connectionStatus" style="color: #e74c3c;">Connecting...</span></p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+        let systemStartTime = null;
+        let sessionData = {
+            lastWaterTime: null,
+            lastFertilizeTime: null,
+            decisionCount: 0,
+            waterCount: 0,
+            fertilizeCount: 0
+        };
+
+        // Fetch sensor data and update dashboard
+        async function fetchSensorData() {
+            try {
+                const response = await fetch(`${API_BASE}/api/sensor`);
+                if (!response.ok) throw new Error('API Error');
+                
+                const data = await response.json();
+                updateDashboard(data);
+                document.getElementById('connectionStatus').textContent = '✓ Connected';
+                document.getElementById('connectionStatus').style.color = '#27ae60';
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('connectionStatus').textContent = '✗ Disconnected';
+                document.getElementById('connectionStatus').style.color = '#e74c3c';
+            }
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+
+        // Update all dashboard elements
+        function updateDashboard(data) {
+            const sensors = data.sensors || {};
+            const decision = data.decision || {};
+
+            // Soil Health (NPK)
+            document.getElementById('npk-n').textContent = Math.round(sensors.npk?.n || 0);
+            document.getElementById('npk-p').textContent = Math.round(sensors.npk?.p || 0);
+            document.getElementById('npk-k').textContent = Math.round(sensors.npk?.k || 0);
+
+            updateNPKStatus('n', sensors.npk?.n || 0);
+            updateNPKStatus('p', sensors.npk?.p || 0);
+            updateNPKStatus('k', sensors.npk?.k || 0);
+
+            // Plant Health
+            document.getElementById('temp').textContent = (sensors.temperature || 0).toFixed(1) + ' °C';
+            document.getElementById('humidity').textContent = (sensors.humidity || 0).toFixed(1) + ' %';
+            document.getElementById('pressure').textContent = (sensors.pressure || 0).toFixed(0) + ' hPa';
+            document.getElementById('light').textContent = Math.round(sensors.light || 0) + ' Lux';
+            document.getElementById('moisture').textContent = (sensors.moisture || 0).toFixed(1) + ' %';
+
+            updateParameterStatus('temp', sensors.temperature || 0);
+            updateParameterStatus('humidity', sensors.humidity || 0);
+            updateParameterStatus('pressure', sensors.pressure || 0);
+            updateParameterStatus('light', sensors.light || 0);
+            updateParameterStatus('moisture', sensors.moisture || 0);
+
+            // Decision Display
+            updateDecisionDisplay(decision);
+
+            // Metrics
+            updateMetrics(decision);
+
+            // Initialize uptime timer if not started
+            if (!systemStartTime) {
+                systemStartTime = Date.now() - (data.uptime_seconds ? data.uptime_seconds * 1000 : 0);
+            }
+            updateUptime();
+        }
+
+        // Update NPK status indicators
+        function updateNPKStatus(nutrient, value) {
+            const ranges = {
+                'n': { min: 100, max: 150, deficiency: 80 },
+                'p': { min: 30, max: 50, deficiency: 25 },
+                'k': { min: 150, max: 200, deficiency: 130 }
+            };
+            const range = ranges[nutrient];
+            const statusEl = document.getElementById(`npk-${nutrient}-status`);
+            
+            if (value < range.deficiency) {
+                statusEl.innerHTML = '<span class="status-critical">Critical</span>';
+            } else if (value < range.min) {
+                statusEl.innerHTML = '<span class="status-warning">Low</span>';
+            } else if (value > range.max) {
+                statusEl.innerHTML = '<span class="status-warning">High</span>';
+            } else {
+                statusEl.innerHTML = '<span class="status-good">✓ Good</span>';
+            }
+        }
+
+        // Update parameter status
+        function updateParameterStatus(param, value) {
+            const ranges = {
+                'temp': { min: 10, max: 30, optimal_min: 20, optimal_max: 25 },
+                'humidity': { min: 30, max: 80, optimal_min: 50, optimal_max: 70 },
+                'pressure': { min: 900, max: 1100, optimal_min: 990, optimal_max: 1030 },
+                'light': { min: 0, max: 10000, optimal_min: 1000, optimal_max: 5000 },
+                'moisture': { min: 20, max: 70, optimal_min: 40, optimal_max: 60 }
+            };
+            
+            const range = ranges[param];
+            const statusEl = document.getElementById(`${param}-status`);
+            
+            if (value < range.min || value > range.max) {
+                statusEl.innerHTML = '<span class="status-critical">Critical</span>';
+            } else if (value < range.optimal_min || value > range.optimal_max) {
+                statusEl.innerHTML = '<span class="status-warning">Caution</span>';
+            } else {
+                statusEl.innerHTML = '<span class="status-good">✓ Good</span>';
+            }
+        }
+
+        // Update decision display with visual feedback
+        function updateDecisionDisplay(decision) {
+            const action = decision.action || 'MONITOR';
+            const psi = decision.psi || 0;
+            const confidence = (decision.confidence || 0) * 100;
+            const reasoning = decision.reasoning || 'Analyzing conditions...';
+
+            let statusClass = 'healthy';
+            if (psi < 0.4) statusClass = 'critical';
+            else if (psi < 0.6) statusClass = 'caution';
+
+            const html = `
+                <div class="decision-box">
+                    <div class="decision-action">
+                        <span class="status-light ${statusClass}"></span>
+                        ${action}
+                    </div>
+                    <div class="decision-psi">Plant Stress Index (PSI): ${(psi * 100).toFixed(1)}% | Confidence: ${confidence.toFixed(0)}%</div>
+                    <div class="psi-bar">
+                        <div class="psi-fill" style="width: ${psi * 100}%"></div>
+                    </div>
+                    <div class="decision-reasoning">📝 ${reasoning}</div>
+                </div>
+            `;
+            document.getElementById('decisionContent').innerHTML = html;
+        }
+
+        // Update metrics (last watering, uptime, etc.)
+        function updateMetrics(decision) {
+            if (decision.action === 'WATER_NOW') {
+                sessionData.lastWaterTime = new Date();
+                sessionData.waterCount++;
+            }
+            if (decision.action === 'FERTILIZE') {
+                sessionData.lastFertilizeTime = new Date();
+                sessionData.fertilizeCount++;
+            }
+            sessionData.decisionCount++;
+
+            const lastWaterText = sessionData.lastWaterTime 
+                ? formatTimeAgo(sessionData.lastWaterTime) 
+                : 'Never';
+            const lastFertilizeText = sessionData.lastFertilizeTime 
+                ? formatTimeAgo(sessionData.lastFertilizeTime) 
+                : 'Never';
+
+            document.getElementById('lastWater').textContent = lastWaterText;
+            document.getElementById('lastFertilize').textContent = lastFertilizeText;
+            document.getElementById('decisionCount').textContent = sessionData.decisionCount;
+        }
+
+        // Update uptime
+        function updateUptime() {
+            if (!systemStartTime) return;
+            const elapsed = Math.floor((Date.now() - systemStartTime) / 1000);
+            const hours = Math.floor(elapsed / 3600);
+            const minutes = Math.floor((elapsed % 3600) / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('uptime').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Format time difference
+        function formatTimeAgo(date) {
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return `${diff}s ago`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return `${Math.floor(diff / 86400)}d ago`;
+        }
+
+        // Force water button
+        async function forceWater() {
+            try {
+                const response = await fetch(`${API_BASE}/water?duration=20`, { method: 'POST' });
+                if (response.ok) {
+                    showConfirmation('✓ Pump activated for 20 seconds');
+                    sessionData.lastWaterTime = new Date();
+                    setTimeout(() => fetchSensorData(), 2000);
+                }
+            } catch (error) {
+                showConfirmation('✗ Error: Could not trigger pump');
+            }
+        }
+
+        // Force fertilize button
+        async function forceFertilize() {
+            try {
+                const response = await fetch(`${API_BASE}/fertilize`, { method: 'POST' });
+                if (response.ok) {
+                    showConfirmation('✓ Fertilizer LED activated for 5 seconds');
+                    sessionData.lastFertilizeTime = new Date();
+                    setTimeout(() => fetchSensorData(), 2000);
+                }
+            } catch (error) {
+                showConfirmation('✗ Error: Could not trigger fertilizer');
+            }
+        }
+
+        // Show confirmation message
+        function showConfirmation(message) {
+            const confirmEl = document.getElementById('confirmation');
+            document.getElementById('confirmationText').textContent = message;
+            confirmEl.classList.add('show');
+            setTimeout(() => confirmEl.classList.remove('show'), 3000);
+        }
+
+        // Initialize and start polling
+        window.addEventListener('load', () => {
+            fetchSensorData();
+            setInterval(fetchSensorData, 3000); // Poll every 3 seconds
+            setInterval(updateUptime, 1000);    // Update uptime every second
+        });
+    </script>
+</body>
+</html>
