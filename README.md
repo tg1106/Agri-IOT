@@ -296,9 +296,10 @@ Special thanks to:
 
 ## 📞 Contact
 
-**Project Lead**: Tharun Gopinath
-**Institution**: Vellore Institute of Technology (VIT), Chennai
-**Department**: SCOPE
+- **Project Lead**: Tharun Gopinath
+- **Institution**: Vellore Institute of Technology (VIT), Chennai
+- **Department**: SCOPE
+- **Mail**: tharun.gopinath2024@vitstudent.ac.in
 
 ---
 
